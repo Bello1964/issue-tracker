@@ -1,4 +1,4 @@
-import axiosClient from "@/api/axios";
+import axiosClient from "@/lib/axios";
 
 const getIssues = async (params = {}) => {
   const response = await axiosClient.get("/issues", {
