@@ -1,6 +1,7 @@
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+import { useState } from "react";
+import CreateIssueDialog from "@/features/issues/dialogs/createissuedialog";
 import useAuth from "@/hooks/useauth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import { formatCurrentDate } from "@/lib/utils/date";
 export default function Welcome() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [createOpen, setCreateOpen] = useState(false);
   return (
     <Card>
       <CardContent className="flex flex-col gap-8 p-6 lg:flex-row lg:items-center lg:justify-between">
@@ -50,13 +52,25 @@ export default function Welcome() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Button onClick={() => navigate("/issues")}>
+        <div className="flex flex-col gap-3 sm:w-56">
+
+          <Button
+            variant="outline"
+            onClick={() => navigate("/issues")}
+          >
+            View All Issues
+          </Button>
+
+          <Button onClick={() => setCreateOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             New Issue
           </Button>
         </div>
       </CardContent>
+      <CreateIssueDialog
+        open={createOpen}
+        onOpenChange={setCreateOpen}
+      />
     </Card>
   );
 }

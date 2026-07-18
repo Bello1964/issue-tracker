@@ -18,13 +18,13 @@ export default function DeleteIssueDialog({
   const navigate = useNavigate();
   const deleteIssue = useDeleteIssue();
 
-  const handleDelete = async () => {
-     console.log("Delete clicked", issue);
+const handleDelete = async () => {
+  console.log("STEP 1 - Button clicked");
+  console.log("Issue:", issue);
+
   try {
     await deleteIssue.mutateAsync(issue.id);
-     console.log("Delete success", result);
     onOpenChange(false);
-
     navigate("/issues");
   } catch (error) {
     console.error(error);
@@ -62,12 +62,12 @@ export default function DeleteIssueDialog({
 
           <Button
             variant="destructive"
-            onClick={() => {
-              alert("Delete button clicked");
-              console.log("Delete button clicked");
-            }}
+            onClick={handleDelete}
+            disabled={deleteIssue.isPending}
           >
-            Delete
+            {deleteIssue.isPending
+              ? "Deleting..."
+              : "Delete"}
           </Button>
         </div>
 

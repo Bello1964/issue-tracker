@@ -4,7 +4,9 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
-
+import { useState } from "react";
+import EditIssueDialog from "@/features/issues/dialogs/editissuedialog";
+import DeleteIssueDialog from "@/features/issues/dialogs/deleteissuedialog";
 import { Button } from "@/components/ui/button";
 
 import useIssue from "@/features/issues/hooks/useissue";
@@ -18,7 +20,8 @@ import SectionCard from "@/components/common/sectioncard";
 
 export default function IssueDetailsPage() {
   const navigate = useNavigate();
-
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const { issueId } = useParams();
   
   const {
@@ -98,12 +101,18 @@ export default function IssueDetailsPage() {
 
         <div className="flex gap-2">
 
-          <Button variant="outline">
+          <Button
+            variant="outline"
+            onClick={() => setEditOpen(true)}
+          >
             <Pencil className="mr-2 h-4 w-4" />
             Edit
           </Button>
 
-          <Button variant="destructive">
+          <Button
+            variant="destructive"
+            onClick={() => setDeleteOpen(true)}
+          >
             <Trash2 className="mr-2 h-4 w-4" />
             Delete
           </Button>
@@ -132,6 +141,20 @@ export default function IssueDetailsPage() {
 
       </SectionCard>
 
+      <EditIssueDialog
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        issue={issue}
+      />
+
+      <DeleteIssueDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        issue={issue}
+      />
+
     </div>
+
+    
   );
 }

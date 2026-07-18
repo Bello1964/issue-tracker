@@ -108,9 +108,8 @@ export default function CreateIssueDialog({
 
         <div className="flex-1 overflow-y-auto px-6 py-6">
           <IssueForm
-            onSubmit={
-              handleCreateIssue
-            }
+            formId="create-issue-form"
+            onSubmit={handleCreateIssue}
           />
         </div>
 

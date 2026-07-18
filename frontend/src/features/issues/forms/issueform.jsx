@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 export default function IssueForm({
   defaultValues,
   onSubmit,
+  formId = "issue-form",
 }) {
   const [formData, setFormData] = useState({
     title: defaultValues?.title ?? "",
@@ -38,7 +39,9 @@ export default function IssueForm({
 
   const payload = {
     ...formData,
-    dueDate: new Date(formData.dueDate).toISOString(),
+    dueDate: formData.dueDate
+  ? new Date(formData.dueDate).toISOString()
+  : undefined,
   };
 
   if (!payload.description.trim()) {
@@ -54,7 +57,7 @@ export default function IssueForm({
 
   return (
     <form
-      id="create-issue-form"
+      id={formId}
       onSubmit={handleSubmit}
       className="space-y-5 pb-2"
     >

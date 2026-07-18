@@ -7,15 +7,9 @@ import {
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { useState} from "react";
 import { useNavigate } from "react-router-dom";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 import {
   ISSUE_PRIORITY_UI,
@@ -23,8 +17,7 @@ import {
 } from "../constants/issueui";
 
 import { formatDate } from "@/lib/utils/date";
-import DeleteIssueDialog from "../dialogs/deleteissuedialog";
-
+import IssueActionsDialog from "../dialogs/issueactionsdialog";
 export default function IssueCard({ issue }) {
   const priority =
     ISSUE_PRIORITY_UI[issue.priority] ??
@@ -35,11 +28,11 @@ export default function IssueCard({ issue }) {
     ISSUE_STATUS_UI.open;
 
   const navigate = useNavigate();
-  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [actionsOpen, setActionsOpen] = useState(false);
   return (
   <>
     <Card
-      // onClick={() => navigate(`/issues/${issue.id}`)}
+      onClick={() => navigate(`/issues/${issue.id}`)}
       className="cursor-pointer transition-all hover:border-primary hover:shadow-md"
     >
       <CardContent className="space-y-5 p-6">
@@ -54,47 +47,16 @@ export default function IssueCard({ issue }) {
             </p>
           </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              className="inline-flex h-9 w-9 items-center justify-center rounded-md transition-colors hover:bg-accent"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <MoreVertical className="h-4 w-4" />
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                onSelect={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  navigate(`/issues/${issue.id}`);
-                }}
-              >
-                View Details
-              </DropdownMenuItem>
-
-                <DropdownMenuItem
-                  onSelect={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    navigate(`/issues/${issue.id}/edit`);
-                  }}
-                >
-                Edit
-              </DropdownMenuItem>
-
-              <DropdownMenuItem
-                className="text-destructive"
-                onSelect={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setDeleteOpen(true);
-                }}
-              >
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={(e) => {
+              e.stopPropagation();
+              setActionsOpen(true);
+            }}
+          >
+            <MoreVertical className="h-4 w-4" />
+          </Button>
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -153,9 +115,9 @@ export default function IssueCard({ issue }) {
       </CardContent>
     </Card>
 
-    <DeleteIssueDialog
-      open={deleteOpen}
-      onOpenChange={setDeleteOpen}
+    <IssueActionsDialog
+      open={actionsOpen}
+      onOpenChange={setActionsOpen}
       issue={issue}
     />
   </>
