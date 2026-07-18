@@ -14,6 +14,9 @@ const serialize = (user) => {
   };
 };
 
+const serializeUsers = (users = []) => users.map(serialize);
+
 module.exports = {
   serializeUser: serialize,
+  serializeUsers,
 };

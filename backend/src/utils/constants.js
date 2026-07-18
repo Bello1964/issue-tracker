@@ -3,6 +3,17 @@ const USER_ROLES = {
   USER: "user",
 };
 
+const USER_MESSAGES = {
+  NOT_FOUND: "User not found.",
+  FORBIDDEN: "Only administrators can perform this action.",
+  SELF_DEMOTION_NOT_ALLOWED:
+    "You cannot remove your own administrator privileges.",
+  LAST_ADMIN:
+  "At least one administrator must remain in the system.",
+  PROMOTED: "User promoted to administrator successfully.",
+  DEMOTED: "Administrator privileges removed successfully.",
+};
+
 const ISSUE_STATUS = {
   OPEN: "open",
   IN_PROGRESS: "in_progress",
@@ -62,6 +73,7 @@ const COOKIE = {
 
 module.exports = {
   USER_ROLES,
+  USER_MESSAGES,
   ISSUE_STATUS,
   ISSUE_PRIORITY,
   AUTH_MESSAGES,

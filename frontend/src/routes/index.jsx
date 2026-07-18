@@ -12,6 +12,8 @@ import DashboardPage from "@/pages/dashboard/dashboardpage";
 import IssuesPage from "@/pages/issues/issuespage";
 import IssueDetailsPage from "@/pages/issues/issuedetailspage";
 import EditIssuePage from "@/pages/issues/editissuepage";
+import AdminRoute from "./adminroute";
+import AdminUsersPage from "@/pages/admin/adminuserspage";
 
 export default function AppRoutes() {
   return (
@@ -31,10 +33,12 @@ export default function AppRoutes() {
           <Route  path="/dashboard"  element={<DashboardPage />} />
           <Route path="/issues" element={<IssuesPage />} />
           <Route path="/issues/:issueId" element={<IssueDetailsPage />} />
-          <Route path="/issues/:issueId/edit"  element={<EditIssuePage />}  />
+          <Route path="/issues/:issueId/edit"  element={<EditIssuePage />} />
+          <Route element={<AdminRoute />}>
+           <Route path="/admin/users" element={<AdminUsersPage />} />
+          </Route>
         </Route>
       </Route>
-
     </Routes>
   );
 }

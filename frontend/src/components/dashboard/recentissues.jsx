@@ -59,8 +59,16 @@ export default function RecentIssues({ issues }) {
             </div>
 
             <div className="text-sm text-muted-foreground">
-              <p>{issue.assignee}</p>
-              <p>{issue.updatedAt}</p>
+              <p>
+                Assigned to{" "}
+                {issue.assignee
+                  ? `${issue.assignee.firstName} ${issue.assignee.lastName}`
+                  : "Unassigned"}
+              </p>
+
+              <p>
+                Updated on {new Date(issue.updatedAt).toLocaleDateString()}
+              </p>
             </div>
           </div>
         ))}

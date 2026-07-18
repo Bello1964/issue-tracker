@@ -51,7 +51,14 @@ export default function AppSidebar() {
 
             <SidebarGroupContent>
               <SidebarMenu>
-                {group.items.map((item) => (
+                {group.items
+                  .filter((item) => {
+                    if (!item.adminOnly) {
+                      return true;
+                    }
+                    return user?.role === "admin";
+                  })
+                  .map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <Link to={item.url}>
                     <SidebarMenuButton

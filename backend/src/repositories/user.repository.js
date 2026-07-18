@@ -36,6 +36,46 @@ class UserRepository extends MongoRepository {
   async updateUser(id, data) {
     return this.updateById(id, data);
   }
+
+  async findUsers() {
+    return this.model
+      .find({
+        isDeleted: false,
+      })
+      .select("-password")
+      .sort({
+        firstName: 1,
+        lastName: 1,
+      });
+  }
+
+  async updateUserRole(id, role) {
+    return this.model
+      .findOneAndUpdate(
+        {
+          _id: id,
+          isDeleted: false,
+        },
+        {
+          role,
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      )
+      .select("-password");
+  }
+
+  
+async countAdmins() {
+  return this.model.countDocuments({
+    role: "admin",
+    isDeleted: false,
+  });
 }
+
+}
+
 
 module.exports = new UserRepository();
