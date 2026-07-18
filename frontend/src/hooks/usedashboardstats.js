@@ -11,6 +11,8 @@ const defaultStatistics = {
   mediumPriority: 0,
   highPriority: 0,
   overdue: 0,
+  assignedToMe: 0,
+  dueToday: 0,
 };
 
 export default function useDashboardStats() {
@@ -22,6 +24,7 @@ export default function useDashboardStats() {
   return {
     ...query,
     statistics:
-      query.data?.data?.statistics ?? defaultStatistics,
+      query.data?.data?.statistics ??
+      defaultStatistics,
   };
 }

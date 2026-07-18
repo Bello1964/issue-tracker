@@ -52,7 +52,8 @@ export default function IssueToolbar({
         </Button>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:flex-nowrap">
+        <div className="flex-1 min-w-[180px]">
         <Select
           value={status}
           onValueChange={onStatusChange}
@@ -72,7 +73,9 @@ export default function IssueToolbar({
             ))}
           </SelectContent>
         </Select>
+         </div>
 
+        <div className="flex-1 min-w-[180px]">
         <Select
           value={priority}
           onValueChange={onPriorityChange}
@@ -92,7 +95,9 @@ export default function IssueToolbar({
             ))}
           </SelectContent>
         </Select>
+         </div>
 
+        <div className="flex-1 min-w-[180px]">
         <Select
           value={sort}
           onValueChange={onSortChange}
@@ -112,6 +117,7 @@ export default function IssueToolbar({
             ))}
           </SelectContent>
         </Select>
+        </div>
       </div>
 
       <CreateIssueDialog

@@ -18,7 +18,10 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <Welcome />
+      <Welcome
+        assignedToMe={statistics.assignedToMe}
+        dueToday={statistics.dueToday}
+      />
 
       <StatsCards
         statistics={statistics}

@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrentDate } from "@/lib/utils/date";
 
-export default function Welcome() {
+export default function Welcome({
+  assignedToMe,
+  dueToday,
+}) {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [createOpen, setCreateOpen] = useState(false);
@@ -32,7 +35,7 @@ export default function Welcome() {
           <div className="flex gap-8">
             <div>
               <p className="text-3xl font-bold">
-                12
+                {assignedToMe}
               </p>
 
               <p className="text-sm text-muted-foreground">
@@ -42,7 +45,7 @@ export default function Welcome() {
 
             <div>
               <p className="text-3xl font-bold">
-                4
+                {dueToday}
               </p>
 
               <p className="text-sm text-muted-foreground">

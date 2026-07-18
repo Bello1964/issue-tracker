@@ -42,7 +42,12 @@ class IssueRepository extends MongoRepository {
     .limit(limit);
 }
 
-async getIssueStatistics(filter) {
+async getIssueStatistics(filter, userId) {
+   const startOfToday = new Date();
+   startOfToday.setHours(0, 0, 0, 0);
+
+   const endOfToday = new Date();
+   endOfToday.setHours(23, 59, 59, 999);
 
   const [statistics] = await this.model.aggregate([
     {
@@ -150,6 +155,42 @@ async getIssueStatistics(filter) {
             ],
           },
         },
+
+        assignedToMe: {
+          $sum: {
+            $cond: [
+              {
+                $eq: ["$assignee", userId],
+              },
+              1,
+              0,
+            ],
+          },
+        },
+        dueToday: {
+          $sum: {
+            $cond: [
+              {
+                $and: [
+                  {
+                    $gte: ["$dueDate", startOfToday],
+                  },
+                  {
+                    $lte: ["$dueDate", endOfToday],
+                  },
+                  {
+                    $ne: ["$status", ISSUE_STATUS.RESOLVED],
+                  },
+                  {
+                    $ne: ["$dueDate", null],
+                  },
+                ],
+              },
+              1,
+              0,
+            ],
+          },
+        },
       },
     },
 
@@ -161,16 +202,17 @@ async getIssueStatistics(filter) {
   ]);
 
   return (
-    statistics || {
-      total: 0,
-      open: 0,
-      inProgress: 0,
-      resolved: 0,
-      lowPriority: 0,
-      mediumPriority: 0,
-      highPriority: 0,
-      overdue: 0,
-    }
+    statistics || {                 total: 0,
+                open: 0,
+                inProgress: 0,
+                resolved: 0,
+                lowPriority: 0,
+                mediumPriority: 0,
+                highPriority: 0,
+                overdue: 0,
+                assignedToMe: 0,
+                dueToday: 0,
+              }
   );
 }
 

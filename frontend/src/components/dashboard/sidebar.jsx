@@ -15,11 +15,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
+import { useSidebar } from "@/components/ui/sidebar";
 
 export default function AppSidebar() {
   const location = useLocation();
   const { user } = useAuth();
-
+ const { setOpenMobile } = useSidebar();
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b">
@@ -51,15 +53,14 @@ export default function AppSidebar() {
               <SidebarMenu>
                 {group.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
+                    <Link to={item.url}>
                     <SidebarMenuButton
                       isActive={location.pathname === item.url}
                     >
-                      <Link to={item.url}>
                         <item.icon />
-
                         <span>{item.title}</span>
-                      </Link>
                     </SidebarMenuButton>
+                    </Link>
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
@@ -69,25 +70,35 @@ export default function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t">
-        <div className="space-y-4 p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary font-semibold text-primary-foreground">
-              {user?.firstName?.[0]}
-              {user?.lastName?.[0]}
-            </div>
+      <div className="space-y-4 p-4">
 
-            <div className="min-w-0">
-              <p className="truncate font-medium">
-                {user?.firstName} {user?.lastName}
-              </p>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary font-semibold text-primary-foreground">
+            {user?.firstName?.[0]}
+            {user?.lastName?.[0]}
+          </div>
 
-              <p className="truncate text-xs text-muted-foreground">
-                {user?.email}
-              </p>
-            </div>
+          <div className="min-w-0">
+            <p className="truncate font-medium">
+              {user?.firstName} {user?.lastName}
+            </p>
+
+            <p className="truncate text-xs text-muted-foreground">
+              {user?.email}
+            </p>
           </div>
         </div>
-      </SidebarFooter>
+
+        <Button
+          variant="outline"
+          className="w-full md:hidden"
+          onClick={() => setOpenMobile(false)}
+        >
+          Cancel
+        </Button>
+
+      </div>
+    </SidebarFooter>
     </Sidebar>
   );
 }

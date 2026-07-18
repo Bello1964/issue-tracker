@@ -389,7 +389,10 @@ async getIssueActivities(id, auth) {
 async getIssueStatistics(auth) {
   const filter = this.#buildVisibilityFilter(auth);
 
-  const statistics = await issueRepository.getIssueStatistics(filter);
+  const statistics = await issueRepository.getIssueStatistics(
+    filter,
+    auth.user._id
+  );
 
   return {
     generatedAt: new Date().toISOString(),
