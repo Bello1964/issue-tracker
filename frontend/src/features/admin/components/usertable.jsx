@@ -6,6 +6,7 @@ import useDemoteUser from "@/features/admin/hooks/usedemoteuser";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ShieldCheck, User} from "lucide-react";
 
 import {
   Table,
