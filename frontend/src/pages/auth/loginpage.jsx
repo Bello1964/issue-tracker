@@ -2,7 +2,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,  Link, } from "react-router-dom";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 
 import useAuth from "@/hooks/useauth";
@@ -185,6 +185,16 @@ export default function LoginPage() {
                   "Sign In"
                 )}
               </Button>
+              <div className="text-center text-sm text-muted-foreground">
+                Don't have an account?{" "}
+
+                <Link
+                  to="/register"
+                  className="font-medium text-primary hover:underline"
+                >
+                  Sign Up
+                </Link>
+              </div>
             </form>
           </Form>
         </CardContent>

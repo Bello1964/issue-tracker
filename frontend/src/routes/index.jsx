@@ -7,6 +7,7 @@ import DashboardLayout from "@/layouts/dashboardLayout";
 
 import LoginPage from "@/pages/auth/loginpage";
 import RegisterPage from "@/pages/auth/registerpage";
+import RootRedirect from "./rootredirect";
 import DashboardPage from "@/pages/dashboard/dashboardpage";
 import IssuesPage from "@/pages/issues/issuespage";
 import IssueDetailsPage from "@/pages/issues/issuedetailspage";
@@ -15,7 +16,10 @@ import EditIssuePage from "@/pages/issues/editissuepage";
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route
+        path="/"
+        element={<RootRedirect />}
+      />
 
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<LoginPage />} />
