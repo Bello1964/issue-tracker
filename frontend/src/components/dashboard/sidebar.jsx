@@ -27,7 +27,7 @@ export default function AppSidebar() {
       <SidebarHeader className="border-b">
         <div className="flex items-center gap-3 px-2 py-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary font-bold text-primary-foreground">
-            IT
+            TS
           </div>
 
           <div>
@@ -60,7 +60,10 @@ export default function AppSidebar() {
                   })
                   .map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <Link to={item.url}>
+                    <Link 
+                    to={item.url}
+                    onClick={() => setOpenMobile(false)}
+                    >
                     <SidebarMenuButton
                       isActive={location.pathname === item.url}
                     >
@@ -95,15 +98,6 @@ export default function AppSidebar() {
             </p>
           </div>
         </div>
-
-        <Button
-          variant="outline"
-          className="w-full md:hidden"
-          onClick={() => setOpenMobile(false)}
-        >
-          Cancel
-        </Button>
-
       </div>
     </SidebarFooter>
     </Sidebar>

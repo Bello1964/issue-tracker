@@ -1,11 +1,7 @@
 import { useMemo, useState } from "react";
-import { Search, RefreshCw } from "lucide-react";
-
+import { Search} from "lucide-react";
 import useUsers from "@/hooks/useusers";
-
 import UserTable from "@/features/admin/components/usertable";
-
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function AdminUsersPage() {
@@ -14,11 +10,10 @@ export default function AdminUsersPage() {
   const {
     users,
     isLoading,
-    refetch,
   } = useUsers();
 
-const filteredUsers = useMemo(() => {
-const value = search.toLowerCase();
+  const filteredUsers = useMemo(() => {
+  const value = search.toLowerCase();
 
   return users
     .filter((user) => {
@@ -39,15 +34,36 @@ const value = search.toLowerCase();
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">
-          User Management
-        </h1>
+    <div className="space-y-2">
+    <h1 className="text-3xl font-bold">
+        User Management
+    </h1>
 
-        <p className="text-muted-foreground">
-          Manage administrator privileges for your workspace.
-        </p>
-      </div>
+    <p className="text-muted-foreground">
+        Manage administrator privileges for your workspace.
+    </p>
+
+    <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
+        <span>
+        Total Users:{" "}
+        <strong>{users.length}</strong>
+        </span>
+
+        <span>
+        Administrators:{" "}
+        <strong>
+            {users.filter(user => user.role === "admin").length}
+        </strong>
+        </span>
+
+        <span>
+        Standard Users:{" "}
+        <strong>
+            {users.filter(user => user.role === "user").length}
+        </strong>
+        </span>
+    </div>
+    </div>
 
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 
@@ -63,15 +79,6 @@ const value = search.toLowerCase();
             className="pl-10"
           />
         </div>
-
-        <Button
-          variant="outline"
-          onClick={refetch}
-        >
-          <RefreshCw className="mr-2 h-4 w-4" />
-          Refresh
-        </Button>
-
       </div>
 
       <UserTable
