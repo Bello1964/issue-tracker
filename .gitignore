@@ -63,3 +63,9 @@ Thumbs.db
 .cache/
 .eslintcache
 .vite/
+
+# ======================
+# Miscellaneous
+# ======================
+
+./README1.md
