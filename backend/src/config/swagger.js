@@ -11,6 +11,7 @@ const options = {
 
       contact: {
         name: "Bello Dahood",
+        
       },
 
       license: {
@@ -20,7 +21,7 @@ const options = {
 
     servers: [
       {
-        url: "http://localhost:5000/api",
+        url: "https://issue-tracker-2shr.onrender.com/api",
         description: "Development Server",
       },
     ],
