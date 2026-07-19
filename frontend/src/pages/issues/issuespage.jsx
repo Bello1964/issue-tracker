@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import IssueToolbar from "@/features/issues/components/issuetoolbar";
 import IssueList from "@/features/issues/components/issuelist";
@@ -12,24 +12,39 @@ export default function IssuesPage() {
   const [sort, setSort] = useState("newest");
   const [page, setPage] = useState(1);
 
-const {
-  issues,
-  pagination,
-  isLoading,
-} = useIssues({
-  page,
-  limit: 10,
-  search,
-  status,
-  priority,
-  sort,
-});
+  useEffect(() => {
+    setPage(1);
+  }, [
+    search,
+    status,
+    priority,
+    sort,
+  ]);
+
+  const {
+    issues,
+    pagination,
+    isLoading,
+  } = useIssues({
+    page,
+    limit: 10,
+    search,
+    status,
+    priority,
+    sort,
+  });
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">
-        Issues
-      </h1>
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Issues
+        </h1>
+
+        <p className="mt-1 text-muted-foreground">
+          Browse, filter, and manage issues across your workspace.
+        </p>
+      </div>
 
       <IssueToolbar
         search={search}
@@ -47,7 +62,7 @@ const {
         pagination={pagination}
         isLoading={isLoading}
         onPageChange={setPage}
-        /> 
+      />
     </div>
   );
 }

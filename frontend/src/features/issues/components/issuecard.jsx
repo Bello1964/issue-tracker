@@ -16,7 +16,7 @@ import {
   ISSUE_STATUS_UI,
 } from "../constants/issueui";
 
-import { formatDate } from "@/lib/utils/date";
+import {formatShortDate,isOverdue} from "@/lib/utils/date";
 import IssueActionsDialog from "../dialogs/issueactionsdialog";
 export default function IssueCard({ issue }) {
   const priority =
@@ -26,15 +26,22 @@ export default function IssueCard({ issue }) {
   const status =
     ISSUE_STATUS_UI[issue.status] ??
     ISSUE_STATUS_UI.open;
-
+  
+  const overdue =issue.status !== "resolved" && isOverdue(issue.dueDate);
   const navigate = useNavigate();
   const [actionsOpen, setActionsOpen] = useState(false);
   return (
   <>
-    <Card
-      onClick={() => navigate(`/issues/${issue.id}`)}
-      className="cursor-pointer transition-all hover:border-primary hover:shadow-md"
-    >
+      <Card
+        onClick={() =>
+          navigate(`/issues/${issue.id}`)
+        }
+        className={`cursor-pointer transition-all hover:border-primary hover:shadow-md ${
+          overdue
+            ? "border-red-500 border-2"
+            : ""
+        }`}
+      >
       <CardContent className="space-y-5 p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
@@ -81,26 +88,43 @@ export default function IssueCard({ issue }) {
             </span>
           </div>
 
+<div className="flex items-center gap-2">
+  <CalendarDays className="h-4 w-4" />
+
+      <div className="flex items-center gap-2">
+
+        <span
+          className={
+            overdue
+              ? "font-medium text-red-600"
+              : "text-muted-foreground"
+          }
+        >
+          {issue.dueDate
+            ? formatShortDate(issue.dueDate)
+            : "No due date"}
+        </span>
+
+        {overdue && (
+          <Badge variant="destructive">
+            Overdue
+          </Badge>
+        )}
+
+      </div>
+    </div>
+
           <div className="flex items-center gap-2">
-            <CalendarDays className="h-4 w-4" />
+            <Clock3 className="h-4 w-4" />
             <span>
-              {issue.dueDate
-                ? formatDate(issue.dueDate)
-                : "No due date"}
+              Created {formatShortDate(issue.createdAt)}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
             <Clock3 className="h-4 w-4" />
             <span>
-              Created {formatDate(issue.createdAt)}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Clock3 className="h-4 w-4" />
-            <span>
-              Updated {formatDate(issue.updatedAt)}
+              Updated {formatShortDate(issue.updatedAt)}
             </span>
           </div>
         </div>

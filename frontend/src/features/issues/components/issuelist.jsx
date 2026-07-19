@@ -23,7 +23,33 @@ if (isLoading) {
   }
 
   return (
-    <div className="space-y-6">
+ <div className="space-y-6">
+
+  <div className="flex items-center justify-between">
+
+    <p className="text-sm text-muted-foreground">
+
+      Showing{" "}
+
+      {(pagination.page - 1) *
+        pagination.limit +
+        1}
+         –
+      {Math.min(
+        pagination.page *
+          pagination.limit,
+        pagination.totalPages
+      )}
+
+      {" "}of{" "}
+
+      {pagination.total}
+
+      {" "}issues
+
+    </p>
+
+  </div>
       <div className="space-y-4">
         {issues.map((issue) => (
           <IssueCard
@@ -33,10 +59,12 @@ if (isLoading) {
         ))}
       </div>
 
-      <IssuePagination
-        pagination={pagination}
-        onPageChange={onPageChange}
-      />
+      {pagination.totalPages > 1 && (
+        <IssuePagination
+          pagination={pagination}
+          onPageChange={onPageChange}
+        />
+      )}
     </div>
   );
 }

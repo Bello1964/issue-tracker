@@ -8,9 +8,9 @@ export default function DetailRow({
         {label}
       </p>
 
-      <p className="text-sm">
-        {value || "—"}
-      </p>
+      <div className="text-sm">
+        {value ?? "—"}
+      </div>
     </div>
   );
 }

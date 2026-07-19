@@ -8,10 +8,18 @@ import {
   ISSUE_STATUS_UI,
 } from "../constants/issueui";
 
-import { formatDate } from "@/lib/utils/date";
+import {
+  formatDateTime,
+  formatLongDate,
+  isOverdue,
+} from "@/lib/utils/date";
 
 export default function IssueDetails({ issue }) {
   if (!issue) return null;
+
+  const overdue =
+    issue.status !== "resolved" &&
+    isOverdue(issue.dueDate);
 
   const priority =
     ISSUE_PRIORITY_UI[issue.priority] ??
@@ -66,19 +74,37 @@ export default function IssueDetails({ issue }) {
             label="Due Date"
             value={
               issue.dueDate
-                ? formatDate(issue.dueDate)
+                ? (
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={
+                          overdue
+                            ? "font-semibold text-red-600"
+                            : ""
+                        }
+                      >
+                        {formatLongDate(issue.dueDate)}
+                      </span>
+
+                      {overdue && (
+                        <Badge variant="destructive">
+                          Overdue
+                        </Badge>
+                      )}
+                    </div>
+                  )
                 : "No due date"
             }
           />
 
           <DetailRow
             label="Created"
-            value={formatDate(issue.createdAt)}
+            value={formatDateTime(issue.createdAt)}
           />
 
           <DetailRow
             label="Updated"
-            value={formatDate(issue.updatedAt)}
+            value={formatDateTime(issue.updatedAt)}
           />
         </div>
 

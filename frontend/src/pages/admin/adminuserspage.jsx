@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Search} from "lucide-react";
-import useUsers from "@/hooks/useusers";
+import useUsers from "@/features/users/hooks/useAllUsers";
 import UserTable from "@/features/admin/components/usertable";
 import { Input } from "@/components/ui/input";
 

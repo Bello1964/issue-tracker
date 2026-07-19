@@ -1,4 +1,26 @@
-import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+import { issueSchema } from "@/lib/validations/issue.schema";
+import {formatPickerDate,} from "@/lib/utils/date";
+import useAllUsers from "@/features/users/hooks/useallusers";
+import { useEffect } from "react";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,47 +30,59 @@ export default function IssueForm({
   onSubmit,
   formId = "issue-form",
 }) {
-  const [formData, setFormData] = useState({
-    title: defaultValues?.title ?? "",
-    description:
-      defaultValues?.description ?? "",
-    priority:
-      defaultValues?.priority ?? "medium",
-    status:
-      defaultValues?.status ?? "open",
-    assignee:
-      defaultValues?.assignee?.id ?? "",
-    dueDate: defaultValues?.dueDate
-      ? new Date(defaultValues.dueDate)
-          .toISOString()
-          .slice(0, 16)
-      : "",
+  const form = useForm({
+    resolver: zodResolver(issueSchema),
+
+    defaultValues: {
+      title: defaultValues?.title ?? "",
+      description: defaultValues?.description ?? "",
+      priority: defaultValues?.priority ?? "medium",
+      status: defaultValues?.status ?? "open",
+      assignee: defaultValues?.assignee?.id ?? "__unassigned__",
+      dueDate: defaultValues?.dueDate
+        ? formatPickerDate(defaultValues.dueDate)
+        : "",
+    },
   });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
+  useEffect(() => {
+  if (!defaultValues) return;
 
-    setFormData((previous) => ({
-      ...previous,
-      [name]: value,
-    }));
-  };
+  form.reset({
+    title: defaultValues.title ?? "",
+    description: defaultValues.description ?? "",
+    priority: defaultValues.priority ?? "medium",
+    status: defaultValues.status ?? "open",
+    assignee: defaultValues.assignee?.id ?? "",
+    dueDate: defaultValues.dueDate
+      ? defaultValues.dueDate.slice(0, 16)
+      : "",
+  });
+}, [defaultValues, form]);
 
- const handleSubmit = (event) => {
-  event.preventDefault();
+  const {users,
+    isLoading: usersLoading,
+  } = useAllUsers();
 
+const handleSubmit = (values) => {
   const payload = {
-    ...formData,
-    dueDate: formData.dueDate
-  ? new Date(formData.dueDate).toISOString()
-  : undefined,
+    ...values,
+
+    assignee:
+      values.assignee === "__unassigned__"
+        ? ""
+        : values.assignee,
+
+    dueDate: values.dueDate
+      ? formatPickerDate(values.dueDate)
+      : undefined,
   };
 
-  if (!payload.description.trim()) {
+  if (!payload.description?.trim()) {
     delete payload.description;
   }
 
-  if (!payload.assignee.trim()) {
+  if (!payload.assignee?.trim()) {
     delete payload.assignee;
   }
 
@@ -56,118 +90,190 @@ export default function IssueForm({
 };
 
   return (
-    <form
-      id={formId}
-      onSubmit={handleSubmit}
-      className="space-y-5 pb-2"
-    >
-      <div>
-        <label className="mb-2 block text-sm font-medium">
-          Title *
-        </label>
-
-        <Input
+    <Form {...form}>
+      <form
+        id={formId}
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-5 pb-2"
+      >
+        <FormField
+          control={form.control}
           name="title"
-          value={formData.title}
-          onChange={handleChange}
-          required
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title *</FormLabel>
+
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
 
-      <div>
-        <label className="mb-2 block text-sm font-medium">
-          Description
-        </label>
-
-        <Textarea
-          rows={5}
+        <FormField
+          control={form.control}
           name="description"
-          value={formData.description}
-          onChange={handleChange}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+
+              <FormControl>
+                <Textarea
+                  rows={5}
+                  {...field}
+                />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+        <div className="grid gap-5 lg:grid-cols-2">
+        <FormField
+          control={form.control}
+          name="priority"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Priority *</FormLabel>
 
-        <div>
-          <label className="mb-2 block text-sm font-medium">
-            Priority *
-          </label>
+              <Select
+                value={field.value}
+                onValueChange={field.onChange}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select priority" />
+                  </SelectTrigger>
+                </FormControl>
 
-          <select
-            name="priority"
-            value={formData.priority}
-            onChange={handleChange}
-            className="w-full rounded-md border bg-background px-3 py-2"
-          >
-            <option value="low">Low</option>
+                <SelectContent>
+                  <SelectItem value="low">
+                    Low
+                  </SelectItem>
 
-            <option value="medium">
-              Medium
-            </option>
+                  <SelectItem value="medium">
+                    Medium
+                  </SelectItem>
 
-            <option value="high">
-              High
-            </option>
-          </select>
+                  <SelectItem value="high">
+                    High
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Status *</FormLabel>
+
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                </FormControl>
+
+                <SelectContent>
+                  <SelectItem value="open">
+                    Open
+                  </SelectItem>
+
+                  <SelectItem value="in_progress">
+                    In Progress
+                  </SelectItem>
+
+                  <SelectItem value="resolved">
+                    Resolved
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         </div>
 
-        <div>
-          <label className="mb-2 block text-sm font-medium">
-            Status *
-          </label>
+        <div className="grid gap-5 lg:grid-cols-2">
+        <FormField
+          control={form.control}
+          name="assignee"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Assignee</FormLabel>
 
-          <select
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            className="w-full rounded-md border bg-background px-3 py-2"
-          >
-            <option value="open">
-              Open
-            </option>
+              <Select
+                value={field.value}
+                onValueChange={field.onChange}
+                disabled={usersLoading}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue
+                      placeholder={
+                        usersLoading
+                          ? "Loading users..."
+                          : "Select assignee"
+                      }
+                    />
+                  </SelectTrigger>
+                </FormControl>
 
-            <option value="in_progress">
-              In Progress
-            </option>
+                <SelectContent>
+                  <SelectItem value="__unassigned__">
+                    No Assignee
+                  </SelectItem>
 
-            <option value="resolved">
-              Resolved
-            </option>
-          </select>
-        </div>
+                {users.map((user) => (
+                  <SelectItem
+                    key={user.id}
+                    value={user.id}
+                  >
+                    {user.firstName} {user.lastName} ({user.email})
+                  </SelectItem>
+                ))}
+                </SelectContent>
 
-      </div>
+              </Select>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <div>
-          <label className="mb-2 block text-sm font-medium">
-            Assignee
-          </label>
-
-          <Input
-            name="assignee"
-            value={formData.assignee}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label className="mb-2 block text-sm font-medium">
-            Due Date *
-          </label>
-
-          <Input
-            type="datetime-local"
+          <FormField
+            control={form.control}
             name="dueDate"
-            value={formData.dueDate}
-            onChange={handleChange}
-            required
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Due Date *</FormLabel>
+
+                <FormControl>
+                  <Input
+                    type="datetime-local"
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
           />
         </div>
-
-      </div>
-    </form>
+      </form>
+    </Form>
   );
 }

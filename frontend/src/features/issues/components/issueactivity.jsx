@@ -2,7 +2,7 @@ import { Clock3 } from "lucide-react";
 
 import ACTIVITY_ACTIONS from "../constants/activityactions";
 
-import { formatDate } from "@/lib/utils/date";
+import { formatDateTime } from "@/lib/utils/date";
 
 export default function IssueActivity({
   activities,
@@ -39,7 +39,7 @@ export default function IssueActivity({
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Clock3 className="h-3 w-3" />
 
-              {formatDate(activity.createdAt)}
+              {formatDateTime(activity.createdAt)}
             </div>
           </div>
         </div>

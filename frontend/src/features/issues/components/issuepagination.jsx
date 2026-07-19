@@ -9,12 +9,21 @@ export default function IssuePagination({
   pagination,
   onPageChange,
 }) {
-  if (!pagination || pagination.totalPages <= 1) {
+  if (
+    !pagination ||
+    pagination.totalPages <= 1
+  ) {
     return null;
   }
 
+  const pages = Array.from(
+    { length: pagination.totalPages },
+    (_, index) => index + 1
+  );
+
   return (
-    <div className="flex items-center justify-between rounded-lg border p-4">
+    <div className="flex flex-col gap-4 rounded-lg border p-4 md:flex-row md:items-center md:justify-between">
+
       <Button
         variant="outline"
         disabled={!pagination.hasPreviousPage}
@@ -26,9 +35,26 @@ export default function IssuePagination({
         Previous
       </Button>
 
-      <span className="text-sm text-muted-foreground">
-        Page {pagination.page} of {pagination.totalPages}
-      </span>
+      <div className="flex flex-wrap items-center justify-center gap-2">
+
+        {pages.map((page) => (
+          <Button
+            key={page}
+            size="icon"
+            variant={
+              page === pagination.page
+                ? "default"
+                : "outline"
+            }
+            onClick={() =>
+              onPageChange(page)
+            }
+          >
+            {page}
+          </Button>
+        ))}
+
+      </div>
 
       <Button
         variant="outline"
@@ -40,6 +66,7 @@ export default function IssuePagination({
         Next
         <ChevronRight className="ml-2 h-4 w-4" />
       </Button>
+
     </div>
   );
 }
