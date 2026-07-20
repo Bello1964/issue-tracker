@@ -11,6 +11,13 @@ const {
 } = require("../validators/user.schema");
 
 const userController = require("../controllers/user.controller");
+const profileController = require("../controllers/profile.controller");
+
+router.get(
+  "/profile",
+  authenticate,
+  profileController.getProfile
+);
 
 router.get(
   "/",

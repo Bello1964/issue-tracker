@@ -134,7 +134,10 @@ export default function AppSidebar() {
 
         <SidebarFooter className="border-t">
           <div className="space-y-4 p-4">
-            <div className="flex items-center gap-3">
+            <div
+              onClick={() => navigate("/profile")}
+              className="flex cursor-pointer items-center gap-3 rounded-lg p-2 transition-colors hover:bg-muted"
+            >
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary font-semibold text-primary-foreground">
                 {user?.firstName?.[0]}
                 {user?.lastName?.[0]}

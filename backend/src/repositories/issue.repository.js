@@ -231,6 +231,46 @@ async updateIssue(id, data, options = {}) {
     .populate("assignee", "firstName lastName email");
 }
 
+async getUserIssueStatistics(userId) {
+  const [
+    created,
+    assigned,
+    resolved,
+    open,
+  ] = await Promise.all([
+    this.model.countDocuments({
+      createdBy: userId,
+      isDeleted: false,
+    }),
+
+    this.model.countDocuments({
+      assignee: userId,
+      isDeleted: false,
+    }),
+
+    this.model.countDocuments({
+      assignee: userId,
+      status: ISSUE_STATUS.RESOLVED,
+      isDeleted: false,
+    }),
+
+    this.model.countDocuments({
+      assignee: userId,
+      status: {
+        $ne: ISSUE_STATUS.RESOLVED,
+      },
+      isDeleted: false,
+    }),
+  ]);
+
+  return {
+    created,
+    assigned,
+    resolved,
+    open,
+  };
+}
+
 async softDeleteIssue(id, deletedBy, options = {}) {
   return this.updateById(
     id,
