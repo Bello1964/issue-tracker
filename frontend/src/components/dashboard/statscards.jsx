@@ -16,24 +16,28 @@ export default function StatsCards({
       value: statistics.total,
       description: "All tracked issues",
       icon: ListTodo,
+      to: "/issues",
     },
     {
       title: "Open",
       value: statistics.open,
       description: "Awaiting work",
       icon: Bug,
+      to: "/issues?status=open",
     },
     {
       title: "In Progress",
       value: statistics.inProgress,
       description: "Currently active",
       icon: CircleDashed,
+      to: "/issues?status=in_progress",
     },
     {
       title: "Resolved",
       value: statistics.resolved,
       description: "Completed",
       icon: CircleCheckBig,
+      to: "/issues?status=resolved",
     },
   ];
 

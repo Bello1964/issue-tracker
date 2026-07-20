@@ -1,3 +1,6 @@
+import { ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function StatCard({
@@ -5,11 +8,26 @@ export default function StatCard({
   value,
   icon: Icon,
   description,
+  to,
 }) {
+  const navigate = useNavigate();
+
+  const clickable = Boolean(to);
+
   return (
-    <Card className="transition-shadow hover:shadow-md">
+    <Card
+      onClick={() => clickable && navigate(to)}
+      className={[
+        "transition-all duration-200",
+        clickable
+          ? "cursor-pointer hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
+          : "hover:shadow-md",
+      ].join(" ")}
+    >
       <CardContent className="flex items-start justify-between p-6">
+
         <div className="space-y-2">
+
           <p className="text-sm text-muted-foreground">
             {title}
           </p>
@@ -23,6 +41,14 @@ export default function StatCard({
               {description}
             </p>
           )}
+
+          {clickable && (
+            <div className="flex items-center gap-1 pt-1 text-xs font-medium text-primary">
+              View issues
+              <ChevronRight className="h-3 w-3" />
+            </div>
+          )}
+
         </div>
 
         {Icon && (
@@ -30,6 +56,7 @@ export default function StatCard({
             <Icon className="h-6 w-6 text-primary" />
           </div>
         )}
+
       </CardContent>
     </Card>
   );
