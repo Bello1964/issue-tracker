@@ -144,7 +144,9 @@ export default function AppSidebar() {
               </div>
 
               <div className="min-w-0">
-                <p className="truncate font-medium">
+                <p className="truncate font-medium"
+                   onClick={() => setOpenMobile(false)}
+                >
                   {user?.firstName}{" "}
                   {user?.lastName}
                 </p>
